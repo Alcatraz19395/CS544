@@ -15,7 +15,7 @@ This project demonstrates a simple file transfer application using QUIC protocol
 1. Clone the repository:
 
     ```sh
-    git clone <repository_url>
+    git clone https://github.com/Alcatraz19395/CS5444.git
     cd quic_file_transfer
     ```
 
