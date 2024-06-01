@@ -48,7 +48,7 @@ This project demonstrates a simple file transfer application using QUIC protocol
 1. Start the server:
 
     ```sh
-    cargo run --bin server -- --server-addr 127.0.0.1:5000 --server-cert server_cert.der --server-key server_key.der --server-port 5000
+    cargo run --bin server -- --server-addr 127.0.0.1 --server-cert server_cert.der --server-key server_key.der
     ```
 
 2. Run the client:
@@ -63,15 +63,15 @@ The client and server can be configured using command line arguments.
 
 ### Server Arguments
 
-- `--server-addr`: Server address (e.g., `127.0.0.1:5000`)
+- `--server-addr`: Server address (e.g., `127.0.0.1`)
 - `--server-cert`: Path to the server certificate (in DER format)
 - `--server-key`: Path to the server key (in DER format)
-- `--server-port`: Port for the server to listen on
 
 ### Client Arguments
 
-- `--server-addr`: Server address (e.g., `127.0.0.1:5000`)
-- `--server-name`: Server hostname (e.g., `localhost`)
+- `--server-addr`: Server address (e.g., `127.0.0.1`)
+- `--server-port`: Server port (e.g., `5000`). This is hardcoded
 - `--client-cert`: Path to the client certificate (in DER format)
 - `--client-key`: Path to the client key (in DER format)
 - `--ca-cert`: Path to the CA certificate (in DER format)
+- `--file-to-send`: Path to the file to be sent to the server.
