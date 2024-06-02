@@ -12,6 +12,28 @@ This project demonstrates a simple file transfer application using QUIC protocol
 - `rustls` for TLS support
 - `futures-util` for stream utilities
 
+## Installation
+
+### Install Rust
+
+If you don't have Rust installed, you can install it using `rustup`. Follow the instructions at [rustup.rs](https://rustup.rs/) or run the following command in your terminal:
+
+```sh
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+
+After installation, make sure to add the Rust binaries to your PATH. You can verify the installation with:
+rustc --version
+cargo --version
+
+Install OpenSSL
+
+For Unix-like systems (Linux, macOS), you can install OpenSSL using your package manager. For example, on Ubuntu, you can run:
+sudo apt-get update
+sudo apt-get install openssl libssl-dev
+
+On macOS, you can use Homebrew:
+brew install openssl
+
 ## Setup
 
 1. Clone the repository:
