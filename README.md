@@ -12,7 +12,7 @@ This project demonstrates a simple file transfer application using QUIC protocol
 - `rustls` for TLS support
 - `futures-util` for stream utilities
 
-Installation
+**Installation**
 
 Install Rust
 
