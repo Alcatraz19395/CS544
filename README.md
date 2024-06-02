@@ -33,7 +33,7 @@ sudo apt-get install openssl libssl-dev
 
 On macOS, you can use Homebrew:
 brew install openssl
-
+``` 
 ## Setup
 
 1. Clone the repository:
