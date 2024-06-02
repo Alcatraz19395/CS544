@@ -5,27 +5,27 @@ Implementing the protocol provided a hands-on experience that deepened my unders
 Key Learnings and Updates
 Statefulness and Protocol Design
 
-Initial Design: The initial protocol specification lacked a detailed state machine to manage the client and server states effectively.
+The initial protocol specification lacked a detailed state machine to manage the client and server states effectively.
 Implementation Insight: During implementation, it became clear that a well-defined state machine was crucial for maintaining the statefulness of the protocol and ensuring correct sequencing and error handling.
 Update: Defined explicit client and server states (Start, Connected, Sending, Receiving, Finished, and Error) and implemented state transitions in the code to ensure the protocol adheres to a deterministic state flow.
 Error Handling and Checksum Validation
 
-Initial Design: The initial design did not account for detailed error handling and checksum validation mechanisms.
+The initial design did not account for detailed error handling and checksum validation mechanisms.
 Implementation Insight: Realizing the importance of data integrity and error detection, I added CRC32 checksum calculations and validations. This addition was crucial for detecting corrupted PDUs and ensuring reliable data transmission.
 Update: Incorporated CRC32 checksum fields in the PDU structure and added checksum validation logic on both client and server sides.
 Protocol Data Unit (PDU) Structure
 
-Initial Design: The PDU structure was initially simple, lacking fields necessary for robust communication.
+The PDU structure was initially simple, lacking fields necessary for robust communication.
 Implementation Insight: The need for additional fields like sequence_number and checksum became evident to handle ordered delivery and data integrity checks.
 Update: Enhanced the PDU structure to include sequence_number and checksum fields, facilitating proper sequencing and error detection.
 Serialization and Deserialization
 
-Initial Design: The initial protocol design underestimated the complexity of efficient serialization and deserialization of PDUs.
+The initial protocol design underestimated the complexity of efficient serialization and deserialization of PDUs.
 Implementation Insight: Implementing these mechanisms using serde and bincode provided practical knowledge on efficiently converting PDUs to and from byte streams.
 Update: Formalized the use of serde for serialization and bincode for efficient binary encoding, ensuring the PDUs are serialized and deserialized consistently.
 Handling Connection Lifecycle
 
-Initial Design: The protocol design did not thoroughly consider the connection lifecycle management, including connection setup, maintenance, and teardown.
+The protocol design did not thoroughly consider the connection lifecycle management, including connection setup, maintenance, and teardown.
 Implementation Insight: Addressing connection lifecycle management was essential to handle scenarios like connection drops, retries, and graceful termination.
 Update: Implemented logic to manage connection establishment, error states, and graceful termination, ensuring robust connection handling.
 Conclusion
