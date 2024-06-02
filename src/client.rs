@@ -5,39 +5,34 @@ use tokio::io::AsyncReadExt;
 use quinn::{ClientConfig, Endpoint};
 use rustls::{Certificate, PrivateKey, RootCertStore, ClientConfig as RustlsClientConfig};
 use std::error::Error;
-use crc32fast::Hasher; // For checksum calculation
+use crc32fast::Hasher;
 use serde::{Serialize, Deserialize};
 mod pdu;
 use pdu::{serialize_pdu, PDU, MSG_TYPE_DATA, MSG_TYPE_END};
 
+/// Configuration for the client, parsed from command line arguments.
 #[derive(StructOpt, Debug)]
 struct Config {
-    // The server address to connect to
     #[structopt(long)]
     server_addr: String,
 
-    // The server port to connect to
     #[structopt(long)]
     server_port: u16,
 
-    // Path to the client certificate file (in DER format)
     #[structopt(long)]
     client_cert: String,
 
-    // Path to the client key file (in DER format)
     #[structopt(long)]
     client_key: String,
 
-    // Path to the CA certificate file (in DER format)
     #[structopt(long)]
     ca_cert: String,
 
-    // Path to the file to be sent
     #[structopt(long)]
     file_to_send: String,
 }
 
-// Client states for the protocol
+/// Possible states for the client during the connection and file transfer process.
 #[derive(Debug)]
 enum ClientState {
     Start,
@@ -52,29 +47,27 @@ async fn main() -> Result<(), Box<dyn Error + Send + Sync>> {
     // Parse command line arguments
     let config = Config::from_args();
 
-    // Combine server address and port into a single SocketAddr
+    // Create a socket address for the server
     let addr: SocketAddr = format!("{}:{}", config.server_addr, config.server_port).parse()?;
 
-    // Load client certificate, key, and CA certificate
+    // Read and parse the client certificate, key, and CA certificate
     let cert = fs::read(&config.client_cert).await?;
     let key = fs::read(&config.client_key).await?;
     let ca_cert = fs::read(&config.ca_cert).await?;
 
-    // Create Certificate and PrivateKey objects from the loaded data
     let cert = Certificate(cert);
     let key = PrivateKey(key);
 
-    // Create a RootCertStore and add the CA certificate to it
+    // Initialize the root certificate store and add the CA certificate
     let mut ca_cert_store = RootCertStore::empty();
     ca_cert_store.add(&Certificate(ca_cert))?;
 
-    // Configure the Rustls client with the certificates and key
+    // Configure TLS settings using Rustls
     let rustls_config = RustlsClientConfig::builder()
         .with_safe_defaults()
         .with_root_certificates(ca_cert_store)
         .with_single_cert(vec![cert], key)?;
 
-    // Create a QUIC client configuration
     let client_config = ClientConfig::new(Arc::new(rustls_config));
     let endpoint = Endpoint::client("[::]:0".parse().unwrap())?;
 
@@ -83,7 +76,7 @@ async fn main() -> Result<(), Box<dyn Error + Send + Sync>> {
     // Connect to the server
     match endpoint.connect_with(client_config, addr, "localhost")?.await {
         Ok(quinn::NewConnection { connection, .. }) => {
-            println!("connected: addr={}", connection.remote_address());
+            println!("Client running: Connected to server at {}", connection.remote_address());
             state = ClientState::Connected;
 
             // Open a unidirectional stream to send data
@@ -93,19 +86,19 @@ async fn main() -> Result<(), Box<dyn Error + Send + Sync>> {
             let mut sequence_number = 0;
 
             state = ClientState::Sending;
-            // Read the file and send its contents as PDUs
             loop {
+                // Read data from the file
                 let n = file.read(&mut buffer).await?;
                 if n == 0 {
                     break;
                 }
 
-                // Calculate checksum for the data
+                // Compute checksum
                 let mut hasher = Hasher::new();
                 hasher.update(&buffer[..n]);
                 let checksum = hasher.finalize();
 
-                // Create a PDU with the read data
+                // Create and serialize PDU
                 let pdu = PDU {
                     msg_type: MSG_TYPE_DATA,
                     sequence_number,
@@ -113,13 +106,16 @@ async fn main() -> Result<(), Box<dyn Error + Send + Sync>> {
                     checksum,
                 };
 
-                // Serialize the PDU and send it over the stream
                 let serialized = serialize_pdu(&pdu);
+                let length = (serialized.len() as u32).to_be_bytes();
+                
+                // Send length and data
+                send.write_all(&length).await?;
                 send.write_all(&serialized).await?;
                 sequence_number += 1;
             }
 
-            // Send an end of transmission PDU
+            // Send end of transmission message
             let pdu = PDU {
                 msg_type: MSG_TYPE_END,
                 sequence_number,
@@ -127,6 +123,8 @@ async fn main() -> Result<(), Box<dyn Error + Send + Sync>> {
                 checksum: 0,
             };
             let serialized = serialize_pdu(&pdu);
+            let length = (serialized.len() as u32).to_be_bytes();
+            send.write_all(&length).await?;
             send.write_all(&serialized).await?;
             send.finish().await?;
             state = ClientState::Finished;
