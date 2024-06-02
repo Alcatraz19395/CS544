@@ -92,7 +92,7 @@ deserialize_pdu: This function takes a byte slice and deserializes it into a PDU
 2. Run the client:
 
     ```sh
-    cargo run --bin client -- --server-addr 127.0.0.1:5000 --server-name localhost --client-cert client_cert.der --client-key client_key.der --ca-cert ca_cert.der
+    cargo run --bin client -- --server-addr 127.0.0.1 --server-port 5000 --client-cert client_cert.der --client-key client_key.der --ca-cert ca_cert.der --file-to-send file_to_send
     ```
 
 ## Configuration
