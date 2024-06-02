@@ -85,6 +85,6 @@ Demo: https://youtu.be/TY0lmwPWZcM
 
 GitHub: https://github.com/Alcatraz19395/CS544
 
-PPT: https://www.canva.com/design/DAGG7zc1VeA/DqkqaY0w5viNCehFmy8V2Q/viewutm_content=DAGG7zc1VeA&utm_campaign=designshare&utm_medium=link&utm_source=editor
+PPT: https://www.canva.com/design/DAGG7zc1VeA/DqkqaY0w5viNCehFmy8V2Q/view?utm_content=DAGG7zc1VeA&utm_campaign=designshare&utm_medium=link&utm_source=editor
 
 
