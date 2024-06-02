@@ -12,9 +12,9 @@ This project demonstrates a simple file transfer application using QUIC protocol
 - `rustls` for TLS support
 - `futures-util` for stream utilities
 
-## Installation
+Installation
 
-### Install Rust
+Install Rust
 
 If you don't have Rust installed, you can install it using `rustup`. Follow the instructions at [rustup.rs](https://rustup.rs/) or run the following command in your terminal:
 
