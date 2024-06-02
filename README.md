@@ -17,7 +17,7 @@ This project demonstrates a simple file transfer application using QUIC protocol
 1. Clone the repository:
 
     ```sh
-    https://github.com/Alcatraz19395/CS544.git
+    git clone https://github.com/Alcatraz19395/CS544.git
     ```
 
 2. Generate the necessary certificates and keys:
