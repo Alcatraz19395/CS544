@@ -79,6 +79,7 @@ The client and server can be configured using command line arguments.
 - `--file-to-send`: Path to the file to be sent to the server.
 
 Extra Credits
+
 Summary: https://github.com/Alcatraz19395/CS544/blob/main/Summary_extra_credit
 
 Demo: https://youtu.be/TY0lmwPWZcM
