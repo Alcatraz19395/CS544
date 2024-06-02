@@ -10,8 +10,46 @@ This project demonstrates a simple file transfer application using QUIC protocol
 - `rustls` for TLS support
 - `futures-util` for stream utilities
 
-## Setup
+## Installation
 
+### Install Rust
+
+If you don't have Rust installed, you can install it using `rustup`. Follow the instructions at [rustup.rs](https://rustup.rs/) or run the following command in your terminal:
+
+```sh
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+
+After installation, make sure to add the Rust binaries to your PATH. You can verify the installation with:
+rustc --version
+cargo --version
+
+Install OpenSSL
+
+For Unix-like systems (Linux, macOS), you can install OpenSSL using your package manager. For example, on Ubuntu, you can run:
+sudo apt-get update
+sudo apt-get install openssl libssl-dev
+
+On macOS, you can use Homebrew:
+brew install openssl
+
+
+PDU
+Message Types:
+
+MSG_TYPE_DATA: This constant represents a data message. It's used to indicate that the PDU contains data to be processed.
+MSG_TYPE_END: This constant indicates the end of the transmission. It's used to signal that no more data will be sent.
+PDU Structure:
+
+msg_type: A u8 that represents the type of the message. It helps in distinguishing between data messages and end-of-transmission messages.
+sequence_number: A u32 that represents the sequence number of the PDU. This is crucial for ensuring that data is received and processed in the correct order, especially in protocols where packets might arrive out of order.
+payload: A Vec<u8> that holds the actual data being transmitted. This allows for flexible and variable-length data transmission.
+checksum: A u32 that holds a checksum for error detection. This ensures data integrity by allowing the receiver to verify that the data has not been corrupted during transmission.
+Serialization and Deserialization Functions:
+
+serialize_pdu: This function takes a PDU and serializes it into a byte vector using the bincode library. This byte vector can then be sent over the network.
+deserialize_pdu: This function takes a byte slice and deserializes it into a PDU using the bincode library. This allows the receiver to reconstruct the original PDU from the received bytes.
+
+## Setup
 1. Clone the repository:
 
     ```sh
@@ -75,3 +113,10 @@ The client and server can be configured using command line arguments.
 - `--client-key`: Path to the client key (in DER format)
 - `--ca-cert`: Path to the CA certificate (in DER format)
 - `--file-to-send`: Path to the file to be sent to the server.
+
+Extra Credits
+Summary: https://github.com/Alcatraz19395/CS544/blob/main/Summary_extra_credit
+Demo: https://youtu.be/TY0lmwPWZcM
+GitHub: https://github.com/Alcatraz19395/CS544
+PPT: https://www.canva.com/design/DAGG7zc1VeA/DqkqaY0w5viNCehFmy8V2Q/view?utm_content=DAGG7zc1VeA&utm_campaign=designshare&utm_medium=link&utm_source=editor
+
